@@ -19,7 +19,11 @@ class ConsoleRunner:
     def run_with_recording():
         print("tcomp2.py A1 Q2 Started Running:")
         start = int(round(time.time() * 1000))
-        ConsoleRunner.__run()
+        if len(sys.argv) == 1:
+            print (
+                "No files input \n showing usage: python tcomp2.py filename file2name file3name... as many file as you want!!")
+        else:
+            ConsoleRunner.__run()
         end = int(round(time.time() * 1000)) - start
         print ("Exited with no Error. Total runtime {}".format(float(end)))
 
