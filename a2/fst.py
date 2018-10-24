@@ -10,22 +10,24 @@ import sys
 import collections
 
 
+# The class the provide features like composition of two FST
 class FstComposer:
 
     def __init__(self, F1, F2):
         self.num_state_validator = F1.num_state * F2.num_state
         self.chars_validator = F1.chars.extend(F2.chars)
-        self.state_indicator = 2
         self.composed_fst = FST(self.num_state_validator, str(self.chars_validator))
         self.__compose(F1, F2)
         # self.composed_fst.print_fst_info()
 
+    # Compose two FST F1, F2
     def __compose(self, F1, F2):
         new_states = self.__compose_states(F1, F2)
         for q1_q2 in new_states:
             for q3_q4 in new_states:
                 self.__add_transitions(F1, F2, q1_q2, q3_q4, new_states)
 
+    # Add transitions to the composed FST
     def __add_transitions(self, F1, F2, q1_q2, q3_q4, new_states):
         q1, q2 = q1_q2["state"][0], q1_q2["state"][1]
         q3, q4 = q3_q4["state"][0], q3_q4["state"][1]
@@ -44,6 +46,7 @@ class FstComposer:
                         new_transition = Transition(q1_q2["new_s_name"], "-", trans2.upper, dest)
                         self.composed_fst.add_transitions(new_transition)
 
+    # add new states to the composed FST
     def __compose_states(self, F1, F2):
         states = list()
         index = 1
@@ -67,6 +70,7 @@ class FstComposer:
                 return s["new_s_name"]
 
 
+# provide static method that read a fst file and generate a FST instance
 class FstGenerator:
 
     def __init__(self):
@@ -78,6 +82,7 @@ class FstGenerator:
             try:
                 open_file = open(fn, "r")
                 lines = open_file.readlines()
+                print lines[0]
                 num, chars = lines.pop(0).split()
                 fst_instance = FST(num, chars)
                 for line in lines:
@@ -96,6 +101,7 @@ class FstGenerator:
             raise AssertionError('file does not exist or is not a file! {} \n'.format(fn))
 
 
+# Representation of a FST
 class FST:
 
     def __init__(self, num, chars):
@@ -130,6 +136,7 @@ class FST:
     def reconstruct_lower(self, s):
         self.__reconstruct_l(s, "", "", "1")
 
+    # recursive reconstruction upper form
     def __reconstruct_u(self, word, lower, upper, state):
         if lower == "@@" and self.states[state] is True:
             print upper
@@ -143,6 +150,7 @@ class FST:
                     self.__reconstruct_u(word, "@@", upper+trans.upper, trans.dest)
             return
 
+    # recursive reconstruction upper form
     def __reconstruct_l(self, word, upper, lower, state):
         if upper == "@@" and self.states[state] is True:
             print lower
@@ -157,6 +165,7 @@ class FST:
             return
 
 
+# Representation of a Transition
 class Transition:
 
     def __init__(self, s, l, u, d):
