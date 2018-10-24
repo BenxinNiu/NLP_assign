@@ -82,7 +82,6 @@ class FstGenerator:
             try:
                 open_file = open(fn, "r")
                 lines = open_file.readlines()
-                print lines[0]
                 num, chars = lines.pop(0).split()
                 fst_instance = FST(num, chars)
                 for line in lines:
