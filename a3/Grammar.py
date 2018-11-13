@@ -1,10 +1,16 @@
+#########################################################
+##  CS 4750 (Fall 2018), Assignment #3                 ##
+##   Script File Name: Grammar.py                      ##
+##       Student Name: Benxin Niu                      ##
+##         Login Name: bn2645                          ##
+##              MUN #: 201518321                       ##
+#########################################################
 import sys
 import os
 from CKY import *
 
 
 class Grammar:
-
 
     @staticmethod
     def read_grammar(fn):
@@ -17,17 +23,3 @@ class Grammar:
             non_terminals.append(rule[0])
         non_terminals = set(non_terminals)
         return CKY(rules, non_terminals)
-
-        # production_rules = list()
-        # for rule in rules:
-        #     assert len(rule) >= 2
-        #     if len(rule) == 2 and rule[1] in terminals:
-        #         n = [rule[0]]
-        #         for r in rules:
-        #             if r[0] == rule[1]:
-        #                 replace = n + r[1:]
-        #                 production_rules.append(replace)
-        #     else:
-        #         production_rules.append(rule)
-        # for r in production_rules:
-        #    print r
